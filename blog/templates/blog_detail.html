@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}BlogDetail{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-5"> <!-- Use container-fluid for full-width -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% if blog.image %}
+                                <img src="{{ blog.image.url }}" class="card-img" style="height: 200px; object-fit: contain;">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="card-title">{{ blog.title }}</h1>
+                            <p class="card-text"><small class="text-muted">Author: {{ blog.author }}</small></p>
+                            <p class="card-text"><small class="text-muted">Published: {{ blog.published_datetime }}</small></p>
+                            <p class="card-text">{{ blog.content|safe }}</p> <!-- Content below the image -->
+                        </div>
+                    </div>
+                    <!-- Add like and comment functionality with icons -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between">
+                                <div></div> <!-- Empty column to align icons to the right -->
+                                <div class="col-md-6 text-right"> <!-- Use col-md-6 to occupy half of the width -->
+                                    <!-- Like icon with heart icon -->
+                                    <a href="{% url 'like_blog' blog.id %}">
+                                        <i class="fas fa-heart" style="color:red;"> {{ blog.likes }}</i>
+                                    </a>
+                                    <!-- Comment icon with comment icon -->
+                                    <a href="#" style="margin-left:30px;" id="commentBtn">
+                                        <i class="fas fa-comment"></i>
+                                        {% with comment_count=blog.comment_set.count %}
+                                        {% if comment_count > 0 %}
+                                            <span>{{ comment_count }}</span>
+                                        {% endif %}
+                                    {% endwith %}
+                                    </a>
+                                    <!-- share icon with share icon -->
+                                    <a href="#" style="margin-left:30px;">
+                                        <i class="fas fa-share" style="color:rgba(0,0,0,0.5);"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comment section -->
+            <div class="card mb-4" id="commentSection" style="display: none;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Comments</h2>
+                            <!-- Display existing comments -->
+                            <div id="allComments">
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                {% for comment in blog.comment_set.all %}
+                                   
+                                            <p>{{ comment.content }}</p>
+                                            <p><small class="text-muted">{{ comment.commenter.username }} - {{ comment.created_datetime }}</small></p>
+                                       
+                                {% empty %}
+                                    <p>No comments yet.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                            </div>
+                            <!-- Comment form -->
+                            <form method="post" action="{% url 'add_comment' blog.id %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="comment_content">Add a comment:</label>
+                                    <textarea class="form-control" id="comment_content" name="content" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript to toggle comment section visibility
+    document.getElementById("commentBtn").addEventListener("click", function() {
+        var commentSection = document.getElementById("commentSection");
+        commentSection.style.display = commentSection.style.display === "none" ? "block" : "none";
+    });
+</script>
+{% endblock %}

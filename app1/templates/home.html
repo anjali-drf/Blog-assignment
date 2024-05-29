@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   
+    <style>
+         body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-p0D8yw05lXPzwJMzWneyy9icrsTEUNldPA&usqp=CAU');
+            background-size: cover;
+            background-position: center;
+            color: purple;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            flex: 1;
+        }
+        .navbar {
+            width: 100%;
+            position: fixed;
+            background-color:rgba(0,0,0,0.6);
+            top: 0;
+            z-index: 1;
+        }
+        .content {
+            margin-top: 60px;
+        }
+        .footer {
+            width: 100%;
+            background-color:rgba(0,0,0,0.6);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 50px;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+        .footer-center {
+            flex: 1;
+            text-align: center;
+            padding-top: 20px;
+        }
+        .btn{
+            border-radius: 10px;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">BlogApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                <strong class="nav-link" style="margin-right:30px;">
+                    Welcome,{{user.username}}
+                  </strong>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container content">
+        <h1>Welcome to Blog Application</h1>
+        {% if user.is_authenticated %}
+        <a type="button" class="btn btn-danger" href="{% url 'blog_list' %}">Read Blogs</a>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <p>A weblog or blog is a popular way to share opinions with a wide<br>
+                audience and make money. Learn what a blog is used for, who blogs<br>
+                and how to write your own.</p>
+            </div>
+        </div>
+        <div>
+            <strong><p>Have a Question?</p></strong>
+            <ul class="list-unstyled">
+                <strong> <li>Location:</strong> 1234 Street Name, City</li>
+                <strong> <li>Email:</strong> contact@blogapp.com</li>
+                <strong><li>Phone: </strong>(123) 456-7890</li>
+            </ul>
+        </div>
+        <!-- Center Copyright -->
+        <div class="footer-center">
+            <p>&copy; 2024 BlogApp. All rights reserved.</p>
+        </div>
+    </footer>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
